@@ -19,8 +19,7 @@ public class ChatController {
 //    public Flux<String> stream(@RequestBody String question){
 //        return ragService.streamChat(question);
 //    }
-
-    // 새로 추가: data: 없이 플레인 텍스트 스트리밍
+    
     @PostMapping(value = "/chat/stream/plain", produces = MediaType.TEXT_PLAIN_VALUE)
     public Flux<String> streamPlain(@RequestBody String question) {
         return ragService.streamChat(question)
