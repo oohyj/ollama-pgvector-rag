@@ -32,12 +32,11 @@ public class RagService {
                 .build();
 
         // 2.  블로킹 가능 구간 오프로딩 + 프롬프트 생성 + 스트리밍
-        //
-        return Mono.fromCallable(() -> vectorStore.similaritySearch(searchReq))
-                .subscribeOn(Schedulers.boundedElastic()) // ★ 이벤트루프 보호
-                .flatMapMany(docs -> {
-                    String template = """
-                        당신은 금융 규정집 RAG 도우미입니다.
+        return Mono.fromCallable(() -> vectorStore.similaritySearch(searchReq)) // postgresql 접근 -> 동기 -> Mono로 감싸기
+                .subscribeOn(Schedulers.boundedElastic())
+                .flatMapMany(docs -> { // Mono -> Flux 변환 , DB에서 유사도 높은 document 가져오기
+                    String template = """ 
+                        당신은 금융 RAG 도우미입니다.
                         아래 [문서] 내용만 근거로 한국어로 간결하게 답하세요.
                         근거가 없으면 "잘 모르겠습니다."라고 답하세요.
                     
@@ -54,10 +53,10 @@ public class RagService {
                         """;
 
                     if (docs == null || docs.isEmpty()) {
-                        return Flux.just("잘 모르겠습니다.");
+                        return Flux.just("잘 모르겠습니다."); //Reactive Stream Publisher
                     }
 
-                    StringBuilder ctx = new StringBuilder();
+                    StringBuilder ctx = new StringBuilder(); // 프롬프트 컨텍스트
                     for (Document d : docs) {
                         String title = String.valueOf(d.getMetadata().getOrDefault("title", ""));
                         String body = d.getText();
@@ -72,12 +71,12 @@ public class RagService {
                     vars.put("documents", ctx.toString());
                     vars.put("question", question);
 
-                    Prompt prompt = new PromptTemplate(template).create(vars);
+                    Prompt prompt = new PromptTemplate(template).create(vars);  // 프롬프트로 변환
 
                     return streamingChatModel.stream(prompt)
                             .mapNotNull(r -> r.getResult().getOutput().getText());
                 })
                 .onErrorResume(e ->
-                        Flux.just("[ERROR] " + e.getClass().getSimpleName() + ": " + e.getMessage()));
+                        Flux.just("error : " + e.getClass().getSimpleName() + ": " + e.getMessage()));
     }
 }

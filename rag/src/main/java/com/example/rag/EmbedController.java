@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class EmbedController {
 
-    private final FinanceEmbedService financeEmbedService;
+    private final RegsEmbedService financeEmbedService;
 
-    @PostMapping("/finance/embed")
+    @PostMapping("/regs/embed")
     public String embed() {
         financeEmbedService.embedFinanceMarkdown();
         return "OK";

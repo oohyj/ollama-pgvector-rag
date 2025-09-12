@@ -19,7 +19,7 @@ public class ChatController {
 //    public Flux<String> stream(@RequestBody String question){
 //        return ragService.streamChat(question);
 //    }
-    
+    // 쪼개서 나오지 않게 하기 위해
     @PostMapping(value = "/chat/stream/plain", produces = MediaType.TEXT_PLAIN_VALUE)
     public Flux<String> streamPlain(@RequestBody String question) {
         return ragService.streamChat(question)
