@@ -1,0 +1,48 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.7'
+	id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'rag demo project for Spring Boot'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	// Spring AI
+	implementation "org.springframework.ai:spring-ai-starter-model-ollama:1.0.1"
+	implementation "org.springframework.ai:spring-ai-starter-vector-store-pgvector:1.0.1"
+	// webflux
+	implementation "org.springframework.boot:spring-boot-starter-webflux"
+	//postgresql
+	implementation "org.springframework.boot:spring-boot-starter-jdbc"
+	runtimeOnly "org.postgresql:postgresql"
+	// Lombok
+	compileOnly "org.projectlombok:lombok"
+	annotationProcessor "org.projectlombok:lombok"
+	// Test
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

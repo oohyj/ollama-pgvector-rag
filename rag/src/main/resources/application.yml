@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/pgvector
+    username: root
+    password: test
+    driver-class-name: org.postgresql.Driver
+
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: gemma:2b-instruct
+      embedding:
+        options:
+          model: nomic-embed-text
+
+    vectorstore:
+      pgvector:
+        uri: jdbc:postgresql://localhost:5433/pgvector
+        username: root
+        password: test
+        table-name: documents
+        dimensions: 768
+        distance-type: COSINE_DISTANCE

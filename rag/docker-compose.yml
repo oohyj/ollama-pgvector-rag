@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+  pg:
+    image: ankane/pgvector:latest
+    container_name: pgvector_springai
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: pgvector
+    ports:
+      - "5433:5432"   # 호스트 5433 -> 컨테이너 5432
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root -d pgvector"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ollama_data:
+  pg_data:
