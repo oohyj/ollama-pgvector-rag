@@ -1,0 +1,1 @@
+Ollama + PostgreSQL(PG vector)
