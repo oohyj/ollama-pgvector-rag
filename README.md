@@ -14,7 +14,7 @@ StreamingChatModel을 통해 실시간 스트리밍 응답을 제공하는 간�
 
 ---
 
-## 아키텍처
+## 동작 흐름
 1. **문서 임베딩 파이프라인**
    - Markdown 문서를 `###` 섹션 단위로 파싱  
    - Ollama Embedding API(`nomic-embed-text`) 호출 → 벡터 생성  
