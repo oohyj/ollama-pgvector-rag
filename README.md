@@ -7,10 +7,9 @@ StreamingChatModel을 통해 실시간 스트리밍 응답을 제공하는 간�
 ---
 
 ## 사용 기술
-- **Backend**: Java 17, Spring Boot 3.4.7, (WebFlux) Spring AI  
-- **Model Serving**: Ollama (`nomic-embed-text`, `gemma:2b-instruct`)  
+- **Backend**: Java 17, Spring Boot 3.4.7, (WebFlux) Spring AI , Docker , Gradle 
+- **Model**: Ollama (`nomic-embed-text`, `gemma:2b-instruct`)  
 - **Database**: PostgreSQL + pgvector (768차원 벡터 저장,검색)  
-- **Infra**: Docker, Gradle  
 
 ---
 
